@@ -110,6 +110,8 @@ func parseRSS2(data []byte) (*Feed, error) {
 		}
 		next.Read = false
 
+		next.FeaturedImage = item.MediaContent.URL
+
 		out.Items = append(out.Items, next)
 		out.ItemMap[next.ID] = struct{}{}
 		out.Unread++
@@ -149,17 +151,23 @@ type rss2_0Link struct {
 type rss2_0Categories []string
 
 type rss2_0Item struct {
-	XMLName     xml.Name `xml:"item"`
-	Title       string   `xml:"title"`
-	Description string   `xml:"description"`
-	Content     string   `xml:"encoded"`
-	Categories  rss2_0Categories `xml:"category"`
-	Link        string   `xml:"link"`
-	PubDate     string   `xml:"pubDate"`
-	Date        string   `xml:"date"`
-	DateValid   bool
-	ID          string            `xml:"guid"`
-	Enclosures  []rss2_0Enclosure `xml:"enclosure"`
+	XMLName      xml.Name         `xml:"item"`
+	Title        string           `xml:"title"`
+	Description  string           `xml:"description"`
+	Content      string           `xml:"encoded"`
+	Categories   rss2_0Categories `xml:"category"`
+	Link         string           `xml:"link"`
+	PubDate      string           `xml:"pubDate"`
+	Date         string           `xml:"date"`
+	DateValid    bool
+	ID           string             `xml:"guid"`
+	MediaContent rss2_0MediaContent `xml:"content"`
+	Enclosures   []rss2_0Enclosure  `xml:"enclosure"`
+}
+
+type rss2_0MediaContent struct {
+	XMLName xml.Name `xml:"content"`
+	URL     string   `xml:"url,attr"`
 }
 
 type rss2_0Enclosure struct {
